@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Nicole Sullivan" />
+
+
+<title>  HW 1</title>
+
+<script src="Hw1-Written_files/header-attrs-2.11/header-attrs.js"></script>
+<script src="Hw1-Written_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link href="Hw1-Written_files/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet" />
+<script src="Hw1-Written_files/bootstrap-4.6.0/bootstrap.bundle.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Karla&amp;display=swap" rel="stylesheet"/>
+<script src="Hw1-Written_files/bs3compat-0.3.1/transition.js"></script>
+<script src="Hw1-Written_files/bs3compat-0.3.1/tabs.js"></script>
+<script src="Hw1-Written_files/bs3compat-0.3.1/bs3compat.js"></script>
+<script src="Hw1-Written_files/navigation-1.1/tabsets.js"></script>
+<link href="Hw1-Written_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="Hw1-Written_files/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore"><b><br><br>HW 1</b></h1>
+<h4 class="author">Nicole Sullivan</h4>
+
+</div>
+
+
+<pre class="r bg-success"><code>knitr::opts_chunk$set(echo = T, message = F, warning = F)</code></pre>
+<pre class="r bg-success"><code># DO THESE FIRST BEFORE LOADING RETICULATE PKG
+# create a new environment 
+#reticulate::conda_create(&quot;hw1&quot;)
+# install numpy
+#reticulate::conda_install(&quot;hw1&quot;, &quot;numpy&quot;)
+# reticulate::conda_install(&quot;hw1&quot;, &quot;scipy&quot;)
+
+reticulate::use_condaenv(&quot;hw1&quot;)</code></pre>
+<pre class="r bg-success"><code>library(tidyverse)
+library(reticulate) # to use Python
+
+# Plotting aesthetics
+loaded_font &lt;- &#39;Didact Gothic&#39;
+text_color &lt;- &#39;white&#39;
+
+# Hex codes
+hex_purple &lt;- &quot;#5E72E4&quot; #primary
+hex_blue_lt &lt;- &quot;#5DCEF0&quot; #info
+hex_green &lt;- &quot;#63CF89&quot; #success
+hex_pink &lt;- &quot;#EA445B&quot; #danger
+hex_orange &lt;- &quot;#EC603E&quot; #warning
+hex_blue_dk &lt;- &quot;#172B4D&quot; #default
+hex_grey &lt;- &quot;#51535e&quot;
+hex_blue_deep &lt;- &quot;#0f151c&quot;
+
+proj_theme &lt;- theme(plot.background = element_rect(fill = &quot;#1e2936&quot;, color = &quot;transparent&quot;),
+        plot.margin = margin(t = &quot;1.5&quot;, r = &quot;1.5&quot;, b = &quot;1.5&quot;, l = &quot;1.5&quot;, unit = &quot;cm&quot;),
+        panel.background = element_rect(fill = &quot;#1e2936&quot;),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.title = element_text(family = loaded_font, color = text_color, hjust = 0.5, face = &quot;bold&quot;, size = 30),
+        plot.caption = element_text(family = loaded_font, color = text_color, size = 9),
+        axis.title = element_text(family = loaded_font, size = 15, color = text_color),
+        axis.text = element_text(family = loaded_font, color = text_color, size = 10),
+        strip.background = element_rect(fill = &quot;#0f151c&quot;),
+        strip.text = element_text(color = &quot;#a1aab5&quot;, family = loaded_font, face = &quot;bold&quot;, size = 18),
+        legend.background = element_rect(fill = &quot;transparent&quot;),
+        legend.title = element_text(family = loaded_font, color = text_color),
+        legend.text = element_text(family = loaded_font, color = text_color),
+        legend.position = &quot;bottom&quot;,
+        legend.key = element_rect(fill = NA))</code></pre>
+<div id="section" class="section level1">
+<h1>1</h1>
+<blockquote>
+<p>Find the Maximum Likelihood Estimation (MLE) of <span class="math inline">\(\theta\)</span> in the following probabilistic density functions. In each case, consider a random sample of size n. Show your calculation.</p>
+</blockquote>
+<div id="a" class="section level2">
+<h2>1a</h2>
+<blockquote>
+<p><span class="math inline">\(f(x|\theta) = x e^{−x2}, x \geq 0\)</span></p>
+</blockquote>
+<p><span class="math display">\[L(\theta|x) = \prod p(x_i | \theta)\]</span> Take the log: <span class="math display">\[ = \sum log p(x_i | \theta)\]</span> Plug in the likelihood: <span class="math display">\[ = \sum log \left (\frac{x}{\theta^2}e^{\frac{-x^2}{2\theta^2}} \right) \]</span> Distribute the logs: <span class="math display">\[ = \sum(\log\frac{x}{\theta^2} - \frac{x^2}{2\theta^2})\]</span> Distribute the summation: <span class="math display">\[ = \sum \log\frac{x}{\theta^2} - \frac{\sum x^2}{2\theta^2}\]</span> Use log rules to rewrite: <span class="math display">\[ = \sum logx - \sum log\theta^2 - \frac{\sum x^2}{2\theta^2}\]</span></p>
+<p>Now, we take the derivative w.r.t. <span class="math inline">\(\theta\)</span>: <span class="math display">\[\frac{\partial}{\partial \theta} = 0 - \frac{2N}{\theta} - - \frac{\sum x^2}{\theta^3}\]</span> <span class="math display">\[ = -\frac{2N}{\theta} + \frac{\sum x^2}{\theta^3}\]</span></p>
+<p>Set equal to zero to maximize: <span class="math display">\[ 0 = -\frac{2N}{\theta} + \frac{\sum x^2}{\theta^3} \]</span> <span class="math display">\[ \frac{2N}{\theta} = \frac{\sum x^2}{\theta^3}\]</span> <span class="math display">\[2N\theta^2 = \sum x^2\]</span> <span class="math display">\[ \hat{\theta} = \sqrt{ \frac{\sum x^2}{2N} }\]</span></p>
+</div>
+<div id="b" class="section level2">
+<h2>1b</h2>
+<blockquote>
+<p><span class="math inline">\(f(x| \theta, \alpha, \beta) = \alpha\theta^{-\alpha \beta} x^{\beta} e^{-(\frac{x}{\theta})^{\beta}}\)</span></p>
+</blockquote>
+</div>
+<div id="c" class="section level2">
+<h2>1c</h2>
+<blockquote>
+<p><span class="math inline">\(f(x | \theta) = \frac{1}{\theta}, 0 \leq x \leq \theta, \theta &gt; 0\)</span></p>
+</blockquote>
+<p>This function has no minimum or maximum, as it is monotonically decreasing.</p>
+<p>To illustrate, we can also draw (or plot) the function:</p>
+<pre class="python bg-success"><code>import numpy as np
+
+theta = np.linspace(1, 100, 1000)
+
+ll_1c_results = []
+
+for i in theta:
+    
+    ll_1c_results.append(1/i)</code></pre>
+<pre class="r bg-success"><code>ll_1c &lt;- as.matrix(py$ll_1c_results)
+
+ggplot() +
+  aes(seq(1, 100, length.out = 1000), as.numeric(ll_1c[,1])) +
+  geom_point(color = &quot;white&quot;, size = 0.7) +
+  labs(x = expression(theta),
+       y = expression(paste(&quot;1/&quot;, theta))) +
+  proj_theme</code></pre>
+<p><img src="Hw1-Written_files/figure-html/unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="section-1" class="section level1">
+<h1>2</h1>
+<blockquote>
+<p>We want to build a pattern classifier with continuous attribute using Bayes’ Theorem. The object to be classified has one feature, x in the range 0 <span class="math inline">\(\leq\)</span> x &lt; 6.</p>
+</blockquote>
+<div id="a-1" class="section level2">
+<h2>2a</h2>
+<blockquote>
+<p>Assuming equal priors, P (C1) = P (C2) = 0.5, classify an object with the attribute value x = 2.5.</p>
+</blockquote>
+<p>To classify, I’ll determine the value of the discriminant for each class for this value of x. Then I’ll classify the observation as the class with the highest discriminant.</p>
+<p><strong>Class 1</strong>: <span class="math display">\[ P(x | C_1) \times P(C_1) = \frac{1}{6} \times \frac{1}{2} = \frac{1}{12} = 0.08\bar3\]</span> <strong>Class 2</strong>:</p>
+<p><span class="math display">\[ P(x | C_2) \times P(C_2) = \frac{1}{4}(2.5 - 1) \times 0.5\]</span> <span class="math display">\[ = \frac{1}{4}(1.5) \times \frac{1}{2} = \frac{1}{4} \times \frac{3}{2} \times \frac{1}{2} = \frac{3}{16} = 0.1875\]</span></p>
+<p><span class="math inline">\(p(C_2 | x) &gt; p(C_1 | x) \therefore\)</span> I’ll classify as <strong><span class="math inline">\(C_2\)</span></strong>.</p>
+</div>
+<div id="b-1" class="section level2">
+<h2>2b</h2>
+<blockquote>
+<p>Assuming unequal priors, P(C1) = 0.7,P(C2) = 0.3, classify an object with the attribute value x = 4.</p>
+</blockquote>
+<p><strong>Class 1:</strong> <span class="math display">\[p(x | C_1) \times p(C_1) = \frac{1}{6} \times 0.7 = 0.11\bar6\]</span></p>
+<p><strong>Class 2:</strong> <span class="math display">\[p(x | C_2) \times p(C_2) = \frac{1}{4}(5-4) \times 0.3\]</span> <span class="math display">\[ = \frac{1}{4} \times 0.3 = 0.075\]</span></p>
+<p><span class="math inline">\(p(C_1 | x) &gt; p(C_2 | x) \therefore\)</span> I’ll classify as <strong><span class="math inline">\(C_1\)</span></strong>.</p>
+</div>
+<div id="c-1" class="section level2">
+<h2>2c</h2>
+<blockquote>
+<p>Consider a decision function <span class="math inline">\(\phi(x)\)</span> of the form <span class="math inline">\(\phi(x)\)</span> = (|x − 3|) − <span class="math inline">\(\alpha\)</span> with one free parameter <span class="math inline">\(\alpha\)</span> in the range 0 ≤ <span class="math inline">\(\alpha\)</span> ≤ 2. You classify a given input x as class 2 if and only if <span class="math inline">\(\phi\)</span>(x) &lt; 0, or equivalently 3 - <span class="math inline">\(\alpha\)</span> &lt; x &lt; 3 + <span class="math inline">\(\alpha\)</span>, otherwise you choose x as class 1. Assume equal priors, P(C1) = P(C2) = 0.5, what is the optimal decision boundary - that is, what is the value of <span class="math inline">\(\alpha\)</span> which minimizes the probability of misclassification? What is the resulting probability of misclassification with this optimal value for <span class="math inline">\(\alpha\)</span>? (Hint: take advantage of the symmetry around x = 3.)</p>
+</blockquote>
+<p>In order to minimize misclassification, we can use two separate methods and confirm that they match.</p>
+<div id="method-1-minimize-the-overlap-between-the-pdfs" class="section level3">
+<h3>Method 1: Minimize the overlap between the pdf’s</h3>
+<p>The first method just uses our intuition: to minimize misclassification, we just need to minimize the overlap of the pdf’s of the two classes, or essentially, maximize the difference between the two:</p>
+<p><span class="math display">\[argmax(\int P(x | C_1) - \int P(x | C_2))\]</span></p>
+<pre class="python bg-success"><code>from scipy.integrate import quad
+
+def c1(x):
+    
+    if x &gt;= 0 and x &lt; 6:
+        return 1/6
+    else:
+        return 0
+      
+def c2(x):
+    
+    if x &gt;= 1 and x &lt; 3:
+        return 0.25 * (x - 1)
+        
+    elif x &gt;= 3 and x &lt; 5:
+        return 0.25 * (5 - x)
+        
+    else:
+        return 0
+      
+def phi(alpha):
+    
+    lwr = 3 - alpha
+    upr = 3 + alpha
+    
+    c2_area = quad(c2, a = lwr, b = upr)[0]
+    c1_area = quad(c1, a = lwr, b = upr)[0]
+    
+    return c2_area - c1_area
+  
+phi_result = []
+alpha_vals = np.linspace(0, 2, 100)
+
+for i in alpha_vals:
+    
+    phi_result.append(phi(i))
+    
+    
+max_area = alpha_vals[np.array(phi_result).argmax()]</code></pre>
+<pre class="r bg-success"><code>ggplot() +
+  aes(as.numeric(py$alpha_vals), as.numeric(py$phi_result)) +
+  geom_point(size = 0.7, color = hex_purple) +
+  geom_vline(xintercept = py$max_area, size = 1.4, color = &#39;white&#39;) +
+  labs(x = expression(alpha),
+       y = expression(phi)) +
+  proj_theme</code></pre>
+<p><img src="Hw1-Written_files/figure-html/unnamed-chunk-6-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><strong>Our misclassification rate is minimized at <span class="math inline">\(\alpha = \frac{4}{3}\)</span>, or when <span class="math inline">\(\frac{5}{3} &lt; x &lt; \frac{14}{3}\)</span>.</strong></p>
+<pre class="python bg-success"><code>c2_misclass = quad(c2, a = 1, b = 5/3)[0] + quad(c2, a = 13/3, b = 5)[0]
+pc2_misclass = c2_misclass * 0.5 # 0.5 prior prob</code></pre>
+<pre class="r bg-success"><code>py$pc2_misclass</code></pre>
+<pre><code>## [1] 0.05555556</code></pre>
+<p>There’s about an 5.5% probability of <span class="math inline">\(P(C_1 | C_2)\)</span> misclassification (predicting as <span class="math inline">\(C_1\)</span> and it was actually <span class="math inline">\(C_2\)</span>) using this <span class="math inline">\(\alpha\)</span>.</p>
+<pre class="python bg-success"><code>pc1_misclass = quad(c1, a = 5/3, b = 15/3)[0] * 0.5 # 0.5 prior prob</code></pre>
+<pre class="r bg-success"><code>py$pc1_misclass</code></pre>
+<pre><code>## [1] 0.2777778</code></pre>
+<p>There’s a 27.8 probability of <span class="math inline">\(P(C_2 | C_1)\)</span> misclassification using this <span class="math inline">\(\alpha\)</span>. <strong>Altogether, there’s a 33% probability of misclassification using this <span class="math inline">\(\alpha\)</span>.</strong></p>
+</div>
+<div id="method-2-integrate-to-find-total-misclassification-for-each-alpha-minimize" class="section level3">
+<h3>Method 2: integrate to find total misclassification for each <span class="math inline">\(\alpha\)</span> &amp; minimize</h3>
+<pre class="python bg-success"><code>
+def p_misclass(alpha):
+    
+    lwr = 3 - alpha
+    upr = 3 + alpha
+    
+    c1_misclass = quad(c1, a = lwr, b = upr)[0]
+    c2_misclass = quad(c2, a = 0, b = lwr)[0] + quad(c2, a = upr, b = 6)[0]
+    
+    return c1_misclass + c2_misclass</code></pre>
+<pre class="python bg-success"><code>
+misclass_result = []
+alpha_vals = np.linspace(0, 2, 100)
+
+for i in alpha_vals:
+    
+    misclass_result.append(p_misclass(i))</code></pre>
+<pre class="python bg-success"><code>
+min_misclass = alpha_vals[np.array(misclass_result).argmin()]</code></pre>
+<p>What is our minimum misclassification rate?</p>
+<pre class="python bg-success"><code>np.array(misclass_result).argmin() * 0.5 # x prior</code></pre>
+<pre><code>## 33.0</code></pre>
+<pre class="r bg-success"><code>ggplot() +
+  aes(as.numeric(py$alpha_vals), as.numeric(py$misclass_result) * 0.5) +
+  geom_point(size = 0.7, color = hex_purple) +
+  geom_vline(xintercept = py$min_misclass, color = &#39;white&#39;, size = 1.2) +
+  labs(x = expression(alpha),
+       y = &quot;Misclassifications&quot;) +
+  proj_theme</code></pre>
+<p><img src="Hw1-Written_files/figure-html/unnamed-chunk-15-1.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
