@@ -153,7 +153,7 @@ class GaussianDiscriminant_Diagonal:
         self.mean = np.array(list(map(class_mean, self.distinct_classes)))
 
         # compute the variance of different features
-        self.S = np.std(Xtrain, axis = 0)
+        self.S = np.var(Xtrain, axis = 0)
 
     def predict(self, Xtest):
         # predict function to get prediction for test set
@@ -163,7 +163,7 @@ class GaussianDiscriminant_Diagonal:
         for i in np.arange(Xtest.shape[0]): # for each test set example
             # calculate the value of discriminant function for each class
             for c in np.arange(self.k):
-                g[i][c] = -0.5 * np.sum( (Xtest[i] - self.mean[c]) / self.S)**2 + np.log(self.p[c])
+                g[i][c] = -0.5 * np.sum( ((Xtest[i] - self.mean[c]) / np.sqrt(self.S))**2 ) + np.log(self.p[c])
 
             # determine the predicted class based on the values of discriminant function
         def predict_class(i):
