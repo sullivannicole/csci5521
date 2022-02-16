@@ -48,7 +48,7 @@ proj_theme <- theme(plot.background = element_rect(fill = "#1e2936", color = "tr
         panel.background = element_rect(fill = "#1e2936"),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        plot.title = element_text(family = loaded_font, color = text_color, hjust = 0.5, face = "bold", size = 30),
+        plot.title = element_text(family = loaded_font, color = text_color, hjust = 0.5, face = "bold", size = 25),
         plot.caption = element_text(family = loaded_font, color = text_color, size = 9),
         axis.title = element_text(family = loaded_font, size = 15, color = text_color),
         axis.text = element_text(family = loaded_font, color = text_color, size = 10),
@@ -91,6 +91,31 @@ $$ \hat{\theta} = \sqrt{ \frac{\sum x^2}{2N} }$$
 
 ## 1b
 > $f(x| \theta, \alpha, \beta) = \alpha\theta^{-\alpha \beta} x^{\beta} e^{-(\frac{x}{\theta})^{\beta}}$
+
+Plug in the likelihood and take logs:
+
+$$\sum log(\alpha\theta^{-\alpha\beta}) + \sum logx^{\beta} -\sum \left(\frac{x}{\theta}^{\beta} \right)$$
+$$\sum log(\alpha\theta^{-\alpha\beta}) + \sum logx^{\beta} -\frac{\sum x^{\beta}}{\theta^{\beta}}$$
+Next, we take the derivative w.r.t. $\theta$ ($\alpha$ and $\beta$ are hyperparameters):
+
+$$\frac{\partial}{\partial \theta} = \frac{N \alpha}{\theta^{-\alpha \beta-1}} \cdot \alpha \beta + 0 + \beta \sum  x^{\beta}\theta^{-\beta-1}$$
+
+$$ = \frac{-N\alpha^2 \beta}{\theta^{-\alpha \beta -1}} + \beta \sum x^{\beta} \theta^{-\beta -1}$$
+
+Now, set equal to zero.
+
+$$0 = \frac{-N\alpha^2 \beta}{\theta^{-\alpha \beta -1}} + \beta \sum x^{\beta} \theta^{-\beta -1}$$
+
+$$\frac{N\alpha^2 \beta}{\theta^{-\alpha \beta -1}} = \beta \sum x^{\beta} \theta^{-\beta -1}$$
+
+$$\frac{N\alpha^2 \beta}{\theta^{-\alpha \beta -1}} = \frac{\beta \sum x^{\beta}} {\theta^{\beta + 1}}$$
+
+$$ \frac{N \alpha^2 \beta \theta^{\beta + 1}}{\theta^{-\alpha \beta -1}} = \beta \sum x^{\beta}$$
+$$ \theta^{(\beta + 1) - (-\alpha \beta -1)} = \frac{\sum x^{\beta}}{N \alpha^2}$$
+$$ \theta^{\beta -\alpha \beta + 2} = \frac{\sum x^{\beta}}{N \alpha^2}$$
+
+$$\hat{\theta} = \left(\frac{x^{\beta}}{N\alpha^2} \right)^{\frac{1}{\beta - \alpha \beta +2}}$$
+
 
 ## 1c
 > $f(x | \theta) = \frac{1}{\theta}, 0 \leq x \leq \theta, \theta > 0$
@@ -138,7 +163,7 @@ $$ P(x | C_1) \times P(C_1) = \frac{1}{6} \times \frac{1}{2} = \frac{1}{12} = 0.
 $$ P(x | C_2) \times P(C_2) = \frac{1}{4}(2.5 - 1) \times 0.5$$
 $$ = \frac{1}{4}(1.5) \times \frac{1}{2} = \frac{1}{4} \times \frac{3}{2} \times \frac{1}{2} = \frac{3}{16} = 0.1875$$
 
-$p(C_2 | x) > p(C_1 | x) \therefore$ I'll classify as **$C_2$**.
+$p(C_2 | x) > p(C_1 | x) \therefore$ **I'll classify as $C_2$**.
 
 ## 2b
 > Assuming unequal priors, P(C1) = 0.7,P(C2) = 0.3, classify an object with the attribute value x = 4.
@@ -150,16 +175,74 @@ $$p(x | C_1) \times p(C_1) = \frac{1}{6} \times 0.7 = 0.11\bar6$$
 $$p(x | C_2) \times p(C_2) = \frac{1}{4}(5-4) \times 0.3$$
 $$ = \frac{1}{4} \times 0.3 = 0.075$$
 
-$p(C_1 | x) > p(C_2 | x) \therefore$ I'll classify as **$C_1$**.
+$p(C_1 | x) > p(C_2 | x) \therefore$ **I'll classify as $C_1$**.
 
 ## 2c
 > Consider a decision function $\phi(x)$ of the form $\phi(x)$ = (|x − 3|) − $\alpha$ with one free parameter $\alpha$ in the range 0 ≤ $\alpha$ ≤ 2. You classify a given input x as class 2 if and only if $\phi$(x) < 0, or equivalently 3 - $\alpha$ < x < 3 + $\alpha$, otherwise you choose x as class 1. Assume equal priors, P(C1) = P(C2) = 0.5, what is the optimal decision boundary - that is, what is the value of $\alpha$ which minimizes the probability of misclassification? What is the resulting probability of misclassification with this optimal value for $\alpha$? (Hint: take advantage of the symmetry around x = 3.)
 
-In order to minimize misclassification, we can use two separate methods and confirm that they match. 
+We basically treat this as a minimization problem: the optimal $\alpha$ will minimize **total misclassification**. To get total misclassification, we need to sum:
+
+* $P(C_2 | C_1)$: the probability of classifying as $C_2$ when the observation is actually $C_1$, and 
+* $P(C_1 | C_2)$: the probability of classifying as $C_1$ when the observation is really $C_2$. 
+
+Or, more succinctly put:
+
+$$\text{Total misclassification rate} = P(C_2 | C_1) + P(C_1 | C_2)$$
+where:
+
+* $P(C_2 | C_1) = \int_{C_2}^{\infty} f_1(x)dx$
+* $P(C_1 | C_2) = \int_{C_1}^{\infty} f_2(x)dx$
+
+or, in plain English, the misclassification rate for, say, $C_1$ is the total area under the overlap of the $C_2$ and $C_1$ *in the $C_2$ classification range*.
+
+That means that:
+
+* $P(C_2 | C_1) = \int_{3-\alpha}^{3+\alpha} \frac{1}{6}dx$
+* $P(C_1 | C_2) = \int_{0}^{3-\alpha} \frac{1}{4}(x-1)dx + \int_{3+\alpha}^{6} \frac{1}{4}(5-x)dx$
+
+and:
+
+$$TMR = \int_{3-\alpha}^{3+\alpha} \frac{1}{6}dx + \int_{0}^{3-\alpha} \frac{1}{4}(x-1)dx + \int_{3+\alpha}^{6} \frac{1}{4}(5-x)dx$$
+Integrating w.r.t x we get:
+
+$$ TMR = \left[ \frac{1}{6}x\right]_{3-\alpha}^{3 + \alpha} + \left[ \frac{1}{4}x^2 + \frac{1}{4}x\right]_{0}^{3 - \alpha} + \left[ \frac{1}{4}x^2 - \frac{5}{4}x\right]_{3 + \alpha}^6$$
+
+and then evaluating the integral gives:
+
+$$ TMR = \frac{1}{8}{\alpha}^2 + \frac{3}{8} + \frac{1}{24}(-4\alpha + 3(\alpha - 3)(\alpha -1))$$
+
+To minimize misclassification, we take the derivative w.r.t. $\alpha$:
+
+$$ \frac{d}{d\alpha}TMR = \frac{\alpha}{2} - \frac{2}{3}$$
+
+and then set equal to zero:
+
+$$ 0 = \frac{\alpha}{2} - \frac{2}{3}$$
+and solve for $\alpha$:
+$$\alpha = \frac{4}{3}$$
+
+**Therefore, we know that the value of $\alpha$ that minimizes misclassification is $\frac{4}{3}$.**
+
+To determine the rate of misclassification that will result from this decision boundary, we just need to plug $\frac{4}{3}$ back into our original equation for TMR:
+
+$$ \frac{1}{8}\left(\frac{4}{3}\right)^2 + \frac{3}{8} + \frac{1}{24}(-4 \cdot \frac{4}{3} + 3(\frac{4}{3} - 3)(\frac{4}{3} -1))$$
+
+which can easily be evaluated with code:
+
+```{r, class.source="bg-success"}
+alpha <- 4/3
+
+(1/8) * alpha^2 + (3/8) + ( (1/24) * (-4 * alpha + 3 * (alpha - 3) * (alpha - 1)))
+
+```
+
+or, there's about a **31% total misclassification rate** when using $\alpha = \frac{4}{3}$.
+
+Just for fun, we can also confirm these results by integrating/minimizing programmatically.
 
 ### Method 1: Minimize the overlap between the pdf's
 
-The first method just uses our intuition: to minimize misclassification, we just need to minimize the overlap of the pdf's of the two classes, or essentially, maximize the difference between the two:
+The first method just uses intuition: to minimize misclassification, we just need to minimize the overlap of the pdf's of the two classes, or essentially, maximize the difference between the two:
 
 $$argmax(\int P(x | C_1) - \int P(x | C_2))$$
 
@@ -212,7 +295,8 @@ ggplot() +
   aes(as.numeric(py$alpha_vals), as.numeric(py$phi_result)) +
   geom_point(size = 0.7, color = hex_purple) +
   geom_vline(xintercept = py$max_area, size = 1.4, color = 'white') +
-  labs(x = expression(alpha),
+  labs(title = "Method 1: Maximize pdf difference",
+       x = expression(alpha),
        y = expression(phi)) +
   proj_theme
 
@@ -223,24 +307,9 @@ ggplot() +
 ```{python, class.source="bg-success"}
 c2_misclass = quad(c2, a = 1, b = 5/3)[0] + quad(c2, a = 13/3, b = 5)[0]
 pc2_misclass = c2_misclass * 0.5 # 0.5 prior prob
-
-```
-
-```{r, class.source="bg-success"}
-py$pc2_misclass
-```
-
-There's about an 5.5% probability of $P(C_1 | C_2)$ misclassification (predicting as $C_1$ and it was actually $C_2$) using this $\alpha$.
-
-```{python, class.source="bg-success"}
 pc1_misclass = quad(c1, a = 5/3, b = 15/3)[0] * 0.5 # 0.5 prior prob
 ```
 
-```{r, class.source="bg-success"}
-py$pc1_misclass
-```
-
-There's a 27.8 probability of $P(C_2 | C_1)$ misclassification using this $\alpha$. **Altogether, there's a 33% probability of misclassification using this $\alpha$.**
 
 ### Method 2: integrate to find total misclassification for each $\alpha$ & minimize
 
@@ -272,13 +341,8 @@ for i in alpha_vals:
 ```{python, class.source="bg-success"}
 
 min_misclass = alpha_vals[np.array(misclass_result).argmin()]
-
-```
-
-What is our minimum misclassification rate?
-
-```{python, class.source="bg-success"}
-np.array(misclass_result).argmin() * 0.5 # x prior
+# min misclass
+# np.array(misclass_result).argmin() * 0.5 # x prior
 ```
 
 ```{r, class.source="bg-success", fig.align = 'center', out.width = "100%"}
@@ -287,11 +351,14 @@ ggplot() +
   aes(as.numeric(py$alpha_vals), as.numeric(py$misclass_result) * 0.5) +
   geom_point(size = 0.7, color = hex_purple) +
   geom_vline(xintercept = py$min_misclass, color = 'white', size = 1.2) +
-  labs(x = expression(alpha),
+  labs(title = "Method 2: Minimize misclassification",
+       x = expression(alpha),
        y = "Misclassifications") +
   proj_theme
 
 ```
+
+**We again find the optimal $\alpha$ is $\frac{4}{3}$!**
 
 
 
