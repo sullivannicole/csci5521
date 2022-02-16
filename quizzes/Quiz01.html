@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Nicole Sullivan (sull1120)" />
+
+
+<title>  Quiz 1</title>
+
+<script src="Quiz01_files/header-attrs-2.11/header-attrs.js"></script>
+<script src="Quiz01_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link href="Quiz01_files/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet" />
+<script src="Quiz01_files/bootstrap-4.6.0/bootstrap.bundle.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Karla&amp;display=swap" rel="stylesheet"/>
+<script src="Quiz01_files/bs3compat-0.3.1/transition.js"></script>
+<script src="Quiz01_files/bs3compat-0.3.1/tabs.js"></script>
+<script src="Quiz01_files/bs3compat-0.3.1/bs3compat.js"></script>
+<script src="Quiz01_files/navigation-1.1/tabsets.js"></script>
+<link href="Quiz01_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="Quiz01_files/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore"><b><br><br>Quiz 1</b></h1>
+<h4 class="author">Nicole Sullivan (sull1120)</h4>
+
+</div>
+
+
+<div id="a" class="section level2">
+<h2>1a</h2>
+<p>2 relevant features could be:</p>
+<ul>
+<li>A binary feature indicating whether the observation is made of living/organic compounds or non-organic compounds</li>
+<li>A binary feature indicating if an observation is programmable by computer vs. non-programmable</li>
+</ul>
+</div>
+<div id="b" class="section level2">
+<h2>1b</h2>
+<p>The labels are:</p>
+<ul>
+<li>non-robot (0)</li>
+<li>robot (1)</li>
+</ul>
+</div>
+<div id="section" class="section level2">
+<h2>2</h2>
+<p><strong>(a)</strong> and <strong>(e)</strong></p>
+</div>
+<div id="a-1" class="section level2">
+<h2>3a</h2>
+<p><strong>C2</strong> because <span class="math inline">\(p(x | C_2)\)</span> &gt; <span class="math inline">\(p(x | C_1)\)</span> (~0.32 &gt; ~0.12) and priors are equal.</p>
+</div>
+<div id="b-1" class="section level2">
+<h2>3b</h2>
+<p><strong>C1</strong> because <span class="math inline">\(p(x | C_1) * 0.9\)</span> &gt; <span class="math inline">\(p(x | C_2) * 0.1\)</span> (= <span class="math inline">\(0.12 \times 0.9\)</span> &gt; <span class="math inline">\(0.32 \times 0.1\)</span> = <span class="math inline">\(0.108 &gt; 0.032\)</span>)</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

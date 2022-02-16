@@ -1,0 +1,31 @@
+---
+title: "<b><br><br>Quiz 1</b>"
+author: "Nicole Sullivan (sull1120)"
+output: 
+  html_document:
+    self_contained: no
+    theme: !expr bslib::bs_theme(bg = "#FFFBF3", fg = "#1F2937", accent = "#1F2937", base_font = bslib::font_link("Karla", href = "https://fonts.googleapis.com/css2?family=Karla&display=swap"), primary = "#1F2937", secondary = "#1F2937", dark = "#1F2937", light = "#1F2937", "border-color" = "#1F2937", "border-width" = "3px", success = "#1F2937", warning = "#6B7280", info = "#FFFBF3", "table-color" = "#1F2937")
+---
+
+## 1a
+
+2 relevant features could be:
+
+* A binary feature indicating whether the observation is made of living/organic compounds or non-organic compounds
+* A binary feature indicating if an observation is programmable by computer vs. non-programmable
+
+## 1b
+The labels are:
+
+* non-robot (0)
+* robot (1)
+
+## 2
+**(a)** and **(e)**
+
+## 3a
+**C2** because $p(x | C_2)$ > $p(x | C_1)$ (~0.32 > ~0.12) and priors are equal.
+
+## 3b
+**C1** because $p(x | C_1) * 0.9$ > $p(x | C_2) * 0.1$ (= $0.12 \times 0.9$ > $0.32 \times 0.1$ = $0.108 > 0.032$)
+
