@@ -194,7 +194,7 @@ proj_theme &lt;- theme(plot.background = element_rect(fill = &quot;#1e2936&quot;
         panel.background = element_rect(fill = &quot;#1e2936&quot;),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        plot.title = element_text(family = loaded_font, color = text_color, hjust = 0.5, face = &quot;bold&quot;, size = 30),
+        plot.title = element_text(family = loaded_font, color = text_color, hjust = 0.5, face = &quot;bold&quot;, size = 25),
         plot.caption = element_text(family = loaded_font, color = text_color, size = 9),
         axis.title = element_text(family = loaded_font, size = 15, color = text_color),
         axis.text = element_text(family = loaded_font, color = text_color, size = 10),
@@ -224,6 +224,16 @@ proj_theme &lt;- theme(plot.background = element_rect(fill = &quot;#1e2936&quot;
 <blockquote>
 <p><span class="math inline">\(f(x| \theta, \alpha, \beta) = \alpha\theta^{-\alpha \beta} x^{\beta} e^{-(\frac{x}{\theta})^{\beta}}\)</span></p>
 </blockquote>
+<p>Plug in likelihood and take logs:</p>
+<p><span class="math display">\[\sum log(\alpha\theta^{-\alpha\beta}) + \sum logx^{\beta} -\sum \left(\frac{x}{\theta}^{\beta} \right)\]</span> <span class="math display">\[\sum log(\alpha\theta^{-\alpha\beta}) + \sum logx^{\beta} -\frac{\sum x^{\beta}}{\theta^{\beta}}\]</span> Next, we take the derivative w.r.t. <span class="math inline">\(\theta\)</span> (<span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> are hyperparameters):</p>
+<p><span class="math display">\[\frac{\partial}{\partial \theta} = \frac{N \alpha}{\theta^{-\alpha \beta-1}} \cdot \alpha \beta + 0 + \beta \sum  x^{\beta}\theta^{-\beta-1}\]</span></p>
+<p><span class="math display">\[ = \frac{-N\alpha^2 \beta}{\theta^{-\alpha \beta -1}} + \beta \sum x^{\beta} \theta^{-\beta -1}\]</span></p>
+<p>Now, set equal to zero.</p>
+<p><span class="math display">\[0 = \frac{-N\alpha^2 \beta}{\theta^{-\alpha \beta -1}} + \beta \sum x^{\beta} \theta^{-\beta -1}\]</span></p>
+<p><span class="math display">\[\frac{N\alpha^2 \beta}{\theta^{-\alpha \beta -1}} = \beta \sum x^{\beta} \theta^{-\beta -1}\]</span></p>
+<p><span class="math display">\[\frac{N\alpha^2 \beta}{\theta^{-\alpha \beta -1}} = \frac{\beta \sum x^{\beta}} {\theta^{\beta + 1}}\]</span></p>
+<p><span class="math display">\[ \frac{N \alpha^2 \beta \theta^{\beta + 1}}{\theta^{-\alpha \beta -1}} = \beta \sum x^{\beta}\]</span> <span class="math display">\[ \theta^{(\beta + 1) - (-\alpha \beta -1)} = \frac{\sum x^{\beta}}{N \alpha^2}\]</span> <span class="math display">\[ \theta^{\beta -\alpha \beta + 2} = \frac{\sum x^{\beta}}{N \alpha^2}\]</span></p>
+<p><span class="math display">\[\hat{\theta} = \left(\frac{x^{\beta}}{N\alpha^2} \right)^{\frac{1}{\beta - \alpha \beta +2}}\]</span></p>
 </div>
 <div id="c" class="section level2">
 <h2>1c</h2>
@@ -281,10 +291,45 @@ ggplot() +
 <blockquote>
 <p>Consider a decision function <span class="math inline">\(\phi(x)\)</span> of the form <span class="math inline">\(\phi(x)\)</span> = (|x − 3|) − <span class="math inline">\(\alpha\)</span> with one free parameter <span class="math inline">\(\alpha\)</span> in the range 0 ≤ <span class="math inline">\(\alpha\)</span> ≤ 2. You classify a given input x as class 2 if and only if <span class="math inline">\(\phi\)</span>(x) &lt; 0, or equivalently 3 - <span class="math inline">\(\alpha\)</span> &lt; x &lt; 3 + <span class="math inline">\(\alpha\)</span>, otherwise you choose x as class 1. Assume equal priors, P(C1) = P(C2) = 0.5, what is the optimal decision boundary - that is, what is the value of <span class="math inline">\(\alpha\)</span> which minimizes the probability of misclassification? What is the resulting probability of misclassification with this optimal value for <span class="math inline">\(\alpha\)</span>? (Hint: take advantage of the symmetry around x = 3.)</p>
 </blockquote>
-<p>In order to minimize misclassification, we can use two separate methods and confirm that they match.</p>
+<p>We basically treat this as a minimization problem: the optimal <span class="math inline">\(\alpha\)</span> will minimize <strong>total misclassification</strong>. To get total misclassification, we need to sum:</p>
+<ul>
+<li><span class="math inline">\(P(C_2 | C_1)\)</span>: the probability of classifying as <span class="math inline">\(C_2\)</span> when the observation is actually <span class="math inline">\(C_1\)</span>, and</li>
+<li><span class="math inline">\(P(C_1 | C_2)\)</span>: the probability of classifying as <span class="math inline">\(C_1\)</span> when the observation is really <span class="math inline">\(C_2\)</span>.</li>
+</ul>
+<p>Or, more succinctly put:</p>
+<p><span class="math display">\[\text{Total misclassification rate} = P(C_2 | C_1) + P(C_1 | C_2)\]</span> where:</p>
+<ul>
+<li><span class="math inline">\(P(C_2 | C_1) = \int_{C_2}^{\infty} f_1(x)dx\)</span></li>
+<li><span class="math inline">\(P(C_1 | C_2) = \int_{C_1}^{\infty} f_2(x)dx\)</span></li>
+</ul>
+<p>or, in plain English, the misclassification rate for, say, <span class="math inline">\(C_1\)</span> is the total area under the overlap of the <span class="math inline">\(C_2\)</span> and <span class="math inline">\(C_1\)</span> <em>in the <span class="math inline">\(C_2\)</span> classification range</em>.</p>
+<p>That means that:</p>
+<ul>
+<li><span class="math inline">\(P(C_2 | C_1) = \int_{3-\alpha}^{3+\alpha} \frac{1}{6}dx\)</span></li>
+<li><span class="math inline">\(P(C_1 | C_2) = \int_{0}^{3-\alpha} \frac{1}{4}(x-1)dx + \int_{3+\alpha}^{6} \frac{1}{4}(5-x)dx\)</span></li>
+</ul>
+<p>and:</p>
+<p><span class="math display">\[TMR = \int_{3-\alpha}^{3+\alpha} \frac{1}{6}dx + \int_{0}^{3-\alpha} \frac{1}{4}(x-1)dx + \int_{3+\alpha}^{6} \frac{1}{4}(5-x)dx\]</span> Integrating w.r.t x we get:</p>
+<p><span class="math display">\[ TMR = \left[ \frac{1}{6}x\right]_{3-\alpha}^{3 + \alpha} + \left[ \frac{1}{4}x^2 + \frac{1}{4}x\right]_{0}^{3 - \alpha} + \left[ \frac{1}{4}x^2 - \frac{5}{4}x\right]_{3 + \alpha}^6\]</span></p>
+<p>and then evaluating the integral gives:</p>
+<p><span class="math display">\[ TMR = \frac{1}{8}{\alpha}^2 + \frac{3}{8} + \frac{1}{24}(-4\alpha + 3(\alpha - 3)(\alpha -1))\]</span></p>
+<p>To minimize misclassification, we take the derivative w.r.t. <span class="math inline">\(\alpha\)</span>:</p>
+<p><span class="math display">\[ \frac{d}{d\alpha}TMR = \frac{\alpha}{2} - \frac{2}{3}\]</span></p>
+<p>and then set equal to zero:</p>
+<p><span class="math display">\[ 0 = \frac{\alpha}{2} - \frac{2}{3}\]</span> and solve for <span class="math inline">\(\alpha\)</span>: <span class="math display">\[\alpha = \frac{4}{3}\]</span></p>
+<p><strong>Therefore, we know that the value of <span class="math inline">\(\alpha\)</span> that minimizes misclassification is <span class="math inline">\(\frac{4}{3}\)</span>.</strong></p>
+<p>To determine the rate of misclassification that will result from this decision boundary, we just need to plug <span class="math inline">\(\frac{4}{3}\)</span> back into our original equation for TMR:</p>
+<p><span class="math display">\[ \frac{1}{8}\left(\frac{4}{3}\right)^2 + \frac{3}{8} + \frac{1}{24}(-4 \cdot \frac{4}{3} + 3(\frac{4}{3} - 3)(\frac{4}{3} -1))\]</span></p>
+<p>which can easily be evaluated with code:</p>
+<pre class="r bg-success"><code>alpha &lt;- 4/3
+
+(1/8) * alpha^2 + (3/8) + ( (1/24) * (-4 * alpha + 3 *(alpha - 3) * (alpha -1)))</code></pre>
+<pre><code>## [1] 0.3055556</code></pre>
+<p>or, there’s about a <strong>31% total misclassification rate</strong> when using <span class="math inline">\(\alpha = \frac{4}{3}\)</span>.</p>
+<p>Just for fun, we can also confirm these results by integrating/minimizing programmatically.</p>
 <div id="method-1-minimize-the-overlap-between-the-pdfs" class="section level3">
 <h3>Method 1: Minimize the overlap between the pdf’s</h3>
-<p>The first method just uses our intuition: to minimize misclassification, we just need to minimize the overlap of the pdf’s of the two classes, or essentially, maximize the difference between the two:</p>
+<p>The first method just uses intuition: to minimize misclassification, we just need to minimize the overlap of the pdf’s of the two classes, or essentially, maximize the difference between the two:</p>
 <p><span class="math display">\[argmax(\int P(x | C_1) - \int P(x | C_2))\]</span></p>
 <pre class="python bg-success"><code>from scipy.integrate import quad
 
@@ -329,20 +374,15 @@ max_area = alpha_vals[np.array(phi_result).argmax()]</code></pre>
   aes(as.numeric(py$alpha_vals), as.numeric(py$phi_result)) +
   geom_point(size = 0.7, color = hex_purple) +
   geom_vline(xintercept = py$max_area, size = 1.4, color = &#39;white&#39;) +
-  labs(x = expression(alpha),
+  labs(title = &quot;Method 1: Maximize pdf difference&quot;,
+       x = expression(alpha),
        y = expression(phi)) +
   proj_theme</code></pre>
-<p><img src="Hw1-Written_files/figure-html/unnamed-chunk-6-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="Hw1-Written_files/figure-html/unnamed-chunk-7-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><strong>Our misclassification rate is minimized at <span class="math inline">\(\alpha = \frac{4}{3}\)</span>, or when <span class="math inline">\(\frac{5}{3} &lt; x &lt; \frac{14}{3}\)</span>.</strong></p>
 <pre class="python bg-success"><code>c2_misclass = quad(c2, a = 1, b = 5/3)[0] + quad(c2, a = 13/3, b = 5)[0]
-pc2_misclass = c2_misclass * 0.5 # 0.5 prior prob</code></pre>
-<pre class="r bg-success"><code>py$pc2_misclass</code></pre>
-<pre><code>## [1] 0.05555556</code></pre>
-<p>There’s about an 5.5% probability of <span class="math inline">\(P(C_1 | C_2)\)</span> misclassification (predicting as <span class="math inline">\(C_1\)</span> and it was actually <span class="math inline">\(C_2\)</span>) using this <span class="math inline">\(\alpha\)</span>.</p>
-<pre class="python bg-success"><code>pc1_misclass = quad(c1, a = 5/3, b = 15/3)[0] * 0.5 # 0.5 prior prob</code></pre>
-<pre class="r bg-success"><code>py$pc1_misclass</code></pre>
-<pre><code>## [1] 0.2777778</code></pre>
-<p>There’s a 27.8 probability of <span class="math inline">\(P(C_2 | C_1)\)</span> misclassification using this <span class="math inline">\(\alpha\)</span>. <strong>Altogether, there’s a 33% probability of misclassification using this <span class="math inline">\(\alpha\)</span>.</strong></p>
+pc2_misclass = c2_misclass * 0.5 # 0.5 prior prob
+pc1_misclass = quad(c1, a = 5/3, b = 15/3)[0] * 0.5 # 0.5 prior prob</code></pre>
 </div>
 <div id="method-2-integrate-to-find-total-misclassification-for-each-alpha-minimize" class="section level3">
 <h3>Method 2: integrate to find total misclassification for each <span class="math inline">\(\alpha\)</span> &amp; minimize</h3>
@@ -364,18 +404,19 @@ for i in alpha_vals:
     
     misclass_result.append(p_misclass(i))</code></pre>
 <pre class="python bg-success"><code>
-min_misclass = alpha_vals[np.array(misclass_result).argmin()]</code></pre>
-<p>What is our minimum misclassification rate?</p>
-<pre class="python bg-success"><code>np.array(misclass_result).argmin() * 0.5 # x prior</code></pre>
-<pre><code>## 33.0</code></pre>
+min_misclass = alpha_vals[np.array(misclass_result).argmin()]
+# min misclass
+# np.array(misclass_result).argmin() * 0.5 # x prior</code></pre>
 <pre class="r bg-success"><code>ggplot() +
   aes(as.numeric(py$alpha_vals), as.numeric(py$misclass_result) * 0.5) +
   geom_point(size = 0.7, color = hex_purple) +
   geom_vline(xintercept = py$min_misclass, color = &#39;white&#39;, size = 1.2) +
-  labs(x = expression(alpha),
+  labs(title = &quot;Method 2: Minimize misclassification&quot;,
+       x = expression(alpha),
        y = &quot;Misclassifications&quot;) +
   proj_theme</code></pre>
-<p><img src="Hw1-Written_files/figure-html/unnamed-chunk-15-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="Hw1-Written_files/figure-html/unnamed-chunk-12-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><strong>We again find the optimal <span class="math inline">\(\alpha\)</span> is <span class="math inline">\(\frac{4}{3}\)</span>!</strong></p>
 </div>
 </div>
 </div>
