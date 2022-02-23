@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Nicole Sullivan" />
+
+
+<title>  HW 1</title>
+
+<script src="Hw2-Written_files/header-attrs-2.11/header-attrs.js"></script>
+<script src="Hw2-Written_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link href="Hw2-Written_files/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet" />
+<script src="Hw2-Written_files/bootstrap-4.6.0/bootstrap.bundle.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Karla&amp;display=swap" rel="stylesheet"/>
+<script src="Hw2-Written_files/bs3compat-0.3.1/transition.js"></script>
+<script src="Hw2-Written_files/bs3compat-0.3.1/tabs.js"></script>
+<script src="Hw2-Written_files/bs3compat-0.3.1/bs3compat.js"></script>
+<script src="Hw2-Written_files/navigation-1.1/tabsets.js"></script>
+<link href="Hw2-Written_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="Hw2-Written_files/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore"><b><br><br>HW 1</b></h1>
+<h4 class="author">Nicole Sullivan</h4>
+
+</div>
+
+
+<pre class="r bg-success"><code>knitr::opts_chunk$set(echo = T, message = F, warning = F)</code></pre>
+<pre class="r bg-success"><code># DO THESE FIRST BEFORE LOADING RETICULATE PKG
+# create a new environment 
+# reticulate::conda_create(&quot;hw2&quot;)
+# 
+# reticulate::conda_install(&quot;hw2&quot;, &quot;numpy&quot;)
+# reticulate::conda_install(&quot;hw2&quot;, &quot;scipy&quot;)
+# 
+# reticulate::use_condaenv(&quot;hw2&quot;)</code></pre>
+<pre class="r bg-success"><code>library(tidyverse)
+library(reticulate) # to use Python
+
+# Plotting aesthetics
+loaded_font &lt;- &#39;Didact Gothic&#39;
+text_color &lt;- &#39;white&#39;
+
+# Hex codes
+hex_purple &lt;- &quot;#5E72E4&quot; #primary
+hex_blue_lt &lt;- &quot;#5DCEF0&quot; #info
+hex_green &lt;- &quot;#63CF89&quot; #success
+hex_pink &lt;- &quot;#EA445B&quot; #danger
+hex_orange &lt;- &quot;#EC603E&quot; #warning
+hex_blue_dk &lt;- &quot;#172B4D&quot; #default
+hex_grey &lt;- &quot;#51535e&quot;
+hex_blue_deep &lt;- &quot;#0f151c&quot;
+
+proj_theme &lt;- theme(plot.background = element_rect(fill = &quot;#1e2936&quot;, color = &quot;transparent&quot;),
+        plot.margin = margin(t = &quot;1.5&quot;, r = &quot;1.5&quot;, b = &quot;1.5&quot;, l = &quot;1.5&quot;, unit = &quot;cm&quot;),
+        panel.background = element_rect(fill = &quot;#1e2936&quot;),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.title = element_text(family = loaded_font, color = text_color, hjust = 0.5, face = &quot;bold&quot;, size = 25),
+        plot.caption = element_text(family = loaded_font, color = text_color, size = 9),
+        axis.title = element_text(family = loaded_font, size = 15, color = text_color),
+        axis.text = element_text(family = loaded_font, color = text_color, size = 10),
+        strip.background = element_rect(fill = &quot;#0f151c&quot;),
+        strip.text = element_text(color = &quot;#a1aab5&quot;, family = loaded_font, face = &quot;bold&quot;, size = 18),
+        legend.background = element_rect(fill = &quot;transparent&quot;),
+        legend.title = element_text(family = loaded_font, color = text_color),
+        legend.text = element_text(family = loaded_font, color = text_color),
+        legend.position = &quot;bottom&quot;,
+        legend.key = element_rect(fill = NA))</code></pre>
+<div id="a" class="section level2">
+<h2>1a</h2>
+<blockquote>
+<p>What is the first principal component <span class="math inline">\(\omega_1\)</span>? Draw the first principal component direction <span class="math inline">\(\omega_1\)</span> on the plot, anchored at the origin.</p>
+</blockquote>
+<p><strong>(Step 1) Find the mean of the data.</strong></p>
+<p><span class="math display">\[ m = \frac{1}{4} \begin{bmatrix} 0 \\ 2 \end{bmatrix}
+\begin{bmatrix} -1 \\ 1 \end{bmatrix}
+\begin{bmatrix} -1 \\ 2 \end{bmatrix}
+\begin{bmatrix} -2 \\ 3 \end{bmatrix} 
+= \frac{1}{4}\begin{bmatrix} -4 \\ 8 \end{bmatrix}
+= \begin{bmatrix} -1 \\ 2 \end{bmatrix}\]</span></p>
+<p><strong>(Step 2) Form the covariance matrix.</strong></p>
+<p><span class="math display">\[ \Sigma = \text{Cov}(X) = \frac{1}{n - 1}XX^T =\frac{1}{3} \begin{bmatrix} 1 &amp; 0 &amp; 0 &amp; -1 \\ 0 &amp; -1 &amp; 0 &amp; 1 \end{bmatrix}
+\begin{bmatrix}1 &amp; 0\\
+0 &amp; -1 \\
+0 &amp; 0 \\
+-1 &amp; 1 \\
+\end{bmatrix} 
+= \begin{bmatrix} \frac{2}{3} &amp; \frac{-1}{3} \\
+\frac{-1}{3} &amp; \frac{2}{3} \\
+\end{bmatrix} \]</span></p>
+<p><strong>(Step 3) Conduct eigenanalysis.</strong></p>
+<p><span class="math display">\[\text{det}\begin{pmatrix} \frac{2}{3} - \lambda &amp; \frac{-1}{3} \\
+\frac{-1}{3} &amp; \frac{2}{3} - \lambda \\
+\end{pmatrix} = \left| \left(\frac{2}{3} - \lambda\right) \left(\frac{2}{3} - \lambda\right) - \frac{1}{3}\left(\frac{1}{3}\right) \right|\]</span> <span class="math display">\[\implies \frac{4}{9} - \frac{2}{3}\lambda - \frac{2}{3}\lambda + \lambda^2 = 0\]</span> <span class="math display">\[\implies \frac{3}{9} - \frac{4}{3}\lambda + \lambda^2 = 0\]</span> <span class="math display">\[\implies \frac{1}{3} - \frac{4}{3}\lambda + \lambda^2 = 0\]</span></p>
+<p><span class="math display">\[\implies (\lambda - 1)(\lambda - \frac{1}{3}) = 0\]</span> which gives us:</p>
+<p><span class="math display">\[\omega_1 = \begin{bmatrix} -0.707  \\
+0.707 \\
+\end{bmatrix}\]</span></p>
+<pre class="r"><code>w1 &lt;- data.frame(x = c(-0.707, 0),
+                 y = c(0.707, 0))
+
+calc_slope &lt;- function(x, y) {
+  
+  rise = x[1] - x[2]
+  run = y[1] - y[2]
+  
+  return(rise/run)
+  
+}
+
+calc_intercept &lt;- function(x, y) {
+  
+  m &lt;- calc_slope(x, y)
+  
+  b &lt;- y[1] - m * x[1]
+  
+  return(b)
+  
+}
+
+w1_slope &lt;- calc_slope(w1$x, w1$y)
+w1_int &lt;- calc_intercept(w1$x, w1$y)
+
+data &lt;- data.frame(x = c(0, -1, -1, -2),
+                   y = c(2, 1, 2, 3),
+                   x_mean = -1,
+                   y_mean = 2) %&gt;%
+  mutate(x_ctr = x - x_mean,
+         y_ctr = y - y_mean)
+
+ggplot() +
+  geom_abline(intercept = w1_int, slope = w1_slope, size = 1.2, color = hex_purple) +
+  geom_point(data = data, aes(x_ctr, y_ctr), color = &quot;white&quot;, alpha = 0.5, size = 2.2) +
+  labs(x = &#39;x (centered)&#39;,
+       y = &#39;y (centered)&#39;) +
+  xlim(-3, 3) +
+  ylim(-3, 3) +
+  proj_theme</code></pre>
+<p><img src="Hw2-Written_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
