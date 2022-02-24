@@ -1,5 +1,5 @@
 ---
-title: "<b><br><br>HW 1</b>"
+title: "<b><br><br>HW 2</b>"
 author: "Nicole Sullivan"
 output: 
   html_document:
@@ -97,15 +97,15 @@ $$\implies \frac{1}{3} - \frac{4}{3}\lambda + \lambda^2 = 0$$
 $$\implies (\lambda - 1)(\lambda - \frac{1}{3}) = 0$$
 which gives us:
 
-$$\omega_1 = \begin{bmatrix} -0.707  \\
-0.707 \\
+$$\omega_1 = \begin{bmatrix} -\frac{\sqrt{2}}{2}  \\
+\frac{\sqrt{2}}{2} \\
 \end{bmatrix}$$
 
 > Draw the first principal component direction $\omega_1$ on the plot, anchored at the origin.
 
 ```{r, class.source="bg-success", fig.align = 'center', out.width = "100%"}
-w1 <- data.frame(x = c(-0.707, 0),
-                 y = c(0.707, 0))
+w1 <- data.frame(x = c(-sqrt(2)/2, 0),
+                 y = c(sqrt(2)/2, 0))
 
 calc_slope <- function(x, y) {
   
@@ -146,6 +146,61 @@ ggplot() +
   proj_theme
 
 ```
+
+## 2a
+> Start from initial cluster centers c1 = 0, c2 = 5, c3 = 10. Show your steps for all iterations: (1) the cluster assignments y1, · · · , y9; (2) the updated cluster centers at the end of that iteration.
+
+| Iteration/step | Cluster 1 | Cluster 2 | Cluster 3 |
+| -- | -- | -- | -- |
+| 0: initialize clusters | $c_1$ = 0 | $c_2$ = 5 | $c_3$ = 10 |
+| 0: assignment | $x_1$: {1} |  $x_2, x_3, x_4, x_5$: {4, 5, 6, 7} | $x_6, x_7, x_8, x_9$: {8, 10, 12, 14} | 
+| 1-1: update means | $c_1$ = 1 | $c_2$ = 5.5 | $c_3$ = 11 |
+| 1-2: assignment | $x_1$: {1} |  $x_2, x_3, x_4, x_5, x_6$: {4, 5, 6, 7, 8} | $x_7, x_8, x_9$: {10, 12, 14} | 
+| 2-1: update means | $c_1$ = 1 | $c_2$ = 6 | $c_3$ = 12 |
+| 2-2: assignment | $x_1$: {1} |  $x_2, x_3, x_4, x_5, x_6$: {4, 5, 6, 7, 8} | $x_7, x_8, x_9$: {10, 12, 14} | 
+| 3-1: update means | $c_1$ = 1 | $c_2$ = 6 | $c_3$ = 12 |
+
+## 2b
+> How many iterations does it take for k-means algorithm to converge (i.e., number of iterations includes all iterations you perform to find convergence)? What is the reconstruction error (i.e., distortion measure J, equation 9.1 of the Bishop’s textbook) at the end of that iteration?
+
+**3 iterations.**
+
+**Distortion measure:**
+
+$$J = \sum^N \sum^K r_{nk} || x_n - \mu_k||^2$$
+$$ = (1 - 1)^2 + (4-6)^2 + (5-6)^2 + (6-6)^2 + (7-6)^2 + (8-6)^2 + (10-12)^2 + (12-12)^2 + (14-12)^2$$
+$$ = 2^2 + 1 + 1 + 2^2 + 2^2 + 2^2$$
+$$ = 4 + 2 + 4 + 4 + 4 = 18$$
+
+## 2c
+> Repeat the above steps with initial cluster centers c1 = 2, c2 = 7, c3 = 12.
+
+| Iteration/step | Cluster 1 | Cluster 2 | Cluster 3 |
+| -- | -- | -- | -- |
+| 0: initialize clusters | $c_1$ = 2 | $c_2$ = 7 | $c_3$ = 12 |
+| 0: assignment | $x_1, x_2$: {1, 4} |  $x_3, x_4, x_5, x_6$: {5, 6, 7, 8} | $x_7, x_8, x_9$: {10, 12, 14} | 
+| 1-1: update means | $c_1$ = 2.5 | $c_2$ = 6.5 | $c_3$ = 12 |
+| 1-2: assignment | $x_1, x_2$: {1, 4} |  $x_3, x_4, x_5, x_6$: {5, 6, 7, 8} | $x_7, x_8, x_9$: {10, 12, 14} | 
+| 2-1: update means | $c_1$ = 2.5 | $c_2$ = 6.5 | $c_3$ = 12 |
+
+## 2d
+> How many iterations does it take for k-means algorithm to converge in this case?
+What is the reconstruction error at the end of that iteration?
+
+**2 iterations.**
+
+**Distortion measure:**
+$$J = \sum^N \sum^K r_{nk} || x_n - \mu_k||^2$$
+$$ = (1-2.5)^2 + (4-2.5)^2 + (5-6.5)^2 + (6-6.5)^2 + (7-6.5)^2 + (8-6.5)^2 + (10-12)^2 + (12-12)^2 + (14-12)^2$$
+$$ = 2.25 + 2.25 + 2.25 + 0.25 + 0.25 + 2.25 + 4 + 4$$
+$$ = 9 + 0.5 + 8 = 17.5$$
+
+## 2e
+> Comparing (a) with (c), which solution is better? Why?
+
+**(c) is better. It converged faster and has lower distortion.**
+
+
 
 
 
