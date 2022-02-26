@@ -9,7 +9,7 @@ class Kmeans:
         self.error_history = []
 
     def fit(self, X, y):
-        # initialize the centers of clutsers as a set of pre-selected samples
+        # initialize the centers of clusters as a set of pre-selected samples
         init_idx = [1, 200, 500, 1000, 1001, 1500, 2000, 2005]
         self.center = X[init_idx] # filter Xtrain down to indices w/ cluster initializations
 
@@ -30,11 +30,12 @@ class Kmeans:
                 distances = np.array(list(map(np.linalg.norm, X[i] - self.center)))
 
                 # determine the cluster assignment by selecting the cluster whose center is closest to the sample
-                cluster_assignment[i] = np.argmin(distances) + 1
+                # cluster assignment ranges from 0 to k-1
+                cluster_assignment[i] = np.argmin(distances)
             
             # update the centers based on cluster assignment (M step)
-            for i in range(len(self.center)):
-                self.center[i] = np.mean(X[np.where(cluster_assignment == i+1)], axis = 0)
+            for i in range(self.num_cluster):
+                self.center[i] = np.mean(X[np.where(cluster_assignment == i)], axis = 0)
 
             # compute the reconstruction error for the current iteration
             cur_error = self.compute_error(X, cluster_assignment)
@@ -47,7 +48,10 @@ class Kmeans:
 
 
         # compute the class label of each cluster based on majority voting (remember to update the corresponding class attribute)
-
+        for i in range(self.num_cluster): 
+            
+            cluster_labels_i = y[np.where(cluster_assignment == i)].astype(int)
+            self.cluster_label[i] = np.bincount(cluster_labels_i).argmax()
 
         return num_iter, self.error_history
 
@@ -58,10 +62,9 @@ class Kmeans:
         # iterate through the test samples
         for i in range(len(X)):
             # find the cluster of each sample
-
+            distances = np.array(list(map(np.linalg.norm, X[i] - self.center)))
             # use the class label of the selected cluster as the predicted class
-
-            pass
+            prediction[i] = self.cluster_label[np.argmin(distances)]
 
         return prediction
 
@@ -72,7 +75,7 @@ class Kmeans:
         for i in range(len(X)):
             
             data_i = X[i]
-            center_i = self.center[cluster_assignment[i] - 1] # Subtract 1 to get the position of the center
+            center_i = self.center[cluster_assignment[i]] # Subtract 1 to get the position of the center
             
             error += np.sum((data_i - center_i)**2)
 
