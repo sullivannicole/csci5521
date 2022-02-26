@@ -1,7 +1,7 @@
 import numpy as np
 import os
 
-os.chdir('/Users/nicolesullivan/Documents/Academic/2021-2023/MS in DS/Coursework/2022/Spring/CSCI 5521/Homework/hw2/hw2_programming/')
+os.chdir('/Users/nicolesullivan/Documents/Academic/2021-2023/MS in DS/Coursework/2022/Spring/CSCI 5521/GitHub/csci5521/homework/hw2/hw2_programming/')
 
 data=np.genfromtxt("Digits089.csv",delimiter=",")
 Xtrain=data[data[:,0]!=5,2:]
@@ -39,15 +39,15 @@ W = None # projection matrix
 
 X_norm = Xtrain - np.mean(Xtrain)
 
-X_cov = np.cov(X_norm, ddof = 1)
+X_cov = np.cov(X_norm.T, ddof = 1) # unbiased estimate
 
 evalues, evectors = np.linalg.eigh(X_cov)
 
 # Sort largest to smallest
-# Per docs, both vals and vector come out asc, so reversing the order ensures they're still matched
-evalues_sorted = np.sort(evalues)[::-1]
+# Per docs, both vals and vectors come out asc, so reversing the order ensures they're still matched
+evalues_sorted = np.flip(evalues, axis = 0) #np.sort(evalues)[::-1]
 
-evectors_sorted = np.sort(evectors)[::-1]
+evectors_sorted = np.flip(evectors.T, axis = 0)#np.sort(evectors)[::-1]
 
 # Find # of PCs needed to capture > 90% of variance
 num_lambdas = 0
@@ -57,8 +57,17 @@ while PoV < 0.9:
     PoV += evalues_sorted[num_lambdas]/np.sum(evalues_sorted)
     num_lambdas += 1
 
-W = evectors_sorted[0:(num_lambdas - 1)]
+W = (evectors_sorted[:num_lambdas]).T
 
+(X_norm.dot(W)).shape
+
+X_norm.dot( (evectors_sorted.T[:][:num_lambdas]).T)
+
+pca_check = evalues_sorted[:num_lambdas] @ W
+
+pca0 = evalues_sorted[0] * W[0]
+
+#(evalues_sorted[:num_lambdas].T @ W).shape
 # Get matching indices for matching evectors
 #evector_indices = np.where(np.in1d(X_evalues, X_evalues_sorted[0:(num_lambdas-1)]))[0]
 
