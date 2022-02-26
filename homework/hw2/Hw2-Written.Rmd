@@ -147,6 +147,44 @@ ggplot() +
 
 ```
 
+We can also confirm this using code.
+
+```{python, class.source="bg-success"}
+
+import numpy as np
+
+A = np.array([[0, 2],
+              [-1, 1]])
+
+B = np.array([[-1, 2],
+              [-2, 3]])
+              
+m = np.sum(np.vstack((A, B)), axis = 0)/4
+
+m
+```
+
+```{python, class.source="bg-success"}
+X = np.vstack((A - m, B - m))
+
+cov_mat = (1/3) * X.T @ X
+
+cov_mat
+```
+
+```{python, class.source="bg-success"}
+np.linalg.eig(cov_mat)
+```
+
+```{python, class.source="bg-success"}
+# Check 1: trace = sum of eigenvalues
+np.trace(cov_mat)
+
+# Check 2: determinant = product of eigenvalues
+np.linalg.det(cov_mat)
+
+```
+
 ## 2a
 > Start from initial cluster centers c1 = 0, c2 = 5, c3 = 10. Show your steps for all iterations: (1) the cluster assignments y1, · · · , y9; (2) the updated cluster centers at the end of that iteration.
 
